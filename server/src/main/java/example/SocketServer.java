@@ -1,6 +1,7 @@
 package example;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -33,6 +34,8 @@ public class SocketServer {
 
         // Create buffered stream to receive data from client, one line at a time
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        
+        
 
         // Receive data until client closes the connection
         String response;
@@ -46,10 +49,15 @@ public class SocketServer {
         	System.out.printf("Received message with content: '%s'%n", response);      	
         }
 
+        // Create stream to send data to server
+        DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+        out.writeBytes("Server: I received your message!");
+        out.writeBytes("\n");
+        
         // Close connection to current client
         clientSocket.close();
         System.out.println("Closed connection with client");
-
+        
         // Close server socket
         serverSocket.close();
         System.out.println("Closed server socket");
